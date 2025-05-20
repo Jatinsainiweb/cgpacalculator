@@ -9,6 +9,31 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.createElement('button');
+      themeToggle.id = 'theme-toggle';
+      themeToggle.innerHTML = '🌙';
+      themeToggle.style.position = 'fixed';
+      themeToggle.style.bottom = '20px';
+      themeToggle.style.right = '20px';
+      themeToggle.style.zIndex = '1000';
+      document.body.appendChild(themeToggle);
+      
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        themeToggle.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', newTheme);
+      });
+      
+      // Check saved theme
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      themeToggle.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -36,7 +61,9 @@
     <section id="cgpa-to-percentage" class="card">
       <h2>CGPA to Percentage Converter</h2>
       <div class="converter-row">
-        <input type="number" id="cgpaInput" placeholder="Enter CGPA" min="0" max="10" step="0.01">
+        <!-- Add to all interactive elements -->
+        <!-- Update existing inputs -->
+        <input type="number" aria-label="Enter CGPA" id="cgpaInput" placeholder="Enter CGPA">
         <select id="universitySelect">
           <option value="vit">VIT</option>
           <option value="srm">SRM</option>
