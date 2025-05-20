@@ -1,0 +1,42 @@
+body { font-family: 'Poppins', Arial, sans-serif; background: #f6f8fa; color: #23272f; margin: 0; padding: 0; }
+header { background: linear-gradient(90deg, #0E4839 0%, #1a5a49 100%); color: #FDDC37; padding: 2rem 1rem 1.2rem 1rem; text-align: center; box-shadow: 0 2px 12px rgba(14,72,57,0.08); border-radius: 0 0 1.5rem 1.5rem; }
+header h1 { margin: 0 0 0.5rem 0; font-size: 2.2rem; font-weight: 600; letter-spacing: 0.5px; }
+header p { margin: 0; font-size: 1.1rem; font-weight: 400; }
+
+main { max-width: 700px; margin: 2.5rem auto 2rem auto; padding: 0 1rem; }
+.card { background: #fff; border-radius: 1.2rem; box-shadow: 0 4px 24px rgba(79,140,255,0.10); margin-bottom: 2rem; padding: 2rem 1.5rem; transition: box-shadow 0.2s; }
+.card:hover { box-shadow: 0 8px 32px rgba(79,140,255,0.16); }
+.card h2 { margin-top: 0; font-size: 1.4rem; font-weight: 600; color: #0E4839; }
+
+form, .converter-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+#subjects-container { width: 100%; }
+.subject-row { display: flex; gap: 0.7rem; margin-bottom: 1rem; align-items: center; justify-content: space-between; }
+.subject-row input[type="text"], .subject-row input[type="number"] { flex: 1 1 0; min-width: 0; padding: 0.6rem 0.8rem; border: 1px solid #e0e6ed; border-radius: 0.7rem; font-size: 1rem; background: #f7faff; transition: border 0.2s; }
+.subject-row input:focus { border: 1.5px solid #4f8cff; outline: none; background: #fff; }
+.remove-subject { background: #ff4f4f; color: #fff; border: none; border-radius: 50%; width: 2.1rem; height: 2.1rem; font-size: 1.3rem; cursor: pointer; transition: background 0.2s; }
+.remove-subject:hover { background: #d43c3c; }
+#add-subject { background: #0E4839; color: #FDDC37; border: none; border-radius: 0.7rem; padding: 0.7rem 1.3rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s; }
+#add-subject:hover { background: #3a6edc; }
+
+.converter-row input[type="number"], .converter-row select { padding: 0.7rem 1rem; border: 1px solid #e0e6ed; border-radius: 0.7rem; font-size: 1rem; background: #f7faff; transition: border 0.2s; margin-right: 0.7rem; }
+.converter-row input:focus, .converter-row select:focus { border: 1.5px solid #4f8cff; outline: none; background: #fff; }
+.converter-row select { min-width: 140px; }
+
+.result { margin-top: 1rem; font-size: 1.1rem; color: #23272f; }
+.result strong { color: #4f8cff; font-size: 1.2rem; font-weight: 600; }
+
+#content h2, #content h3, #content h4 { color: #4f8cff; margin-top: 1.5rem; }
+#content pre { background: #f7faff; border-radius: 0.7rem; padding: 1rem; overflow-x: auto; }
+#content ul, #content dl { margin-left: 1.2rem; }
+#content li, #content dd { margin-bottom: 0.5rem; }
+
+footer { background: #fff; color: #0E4839; text-align: center; padding: 1.2rem 0 1.2rem 0; font-size: 1rem; border-top: 1px solid #e0e6ed; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 -2px 12px rgba(14,72,57,0.06); margin-top: 2rem; }
+.heart { color: #ff4f4f; font-size: 1.2em; vertical-align: middle; }
+
+@media (max-width: 600px) {
+  main { padding: 0 0.2rem; }
+  .card { padding: 1.2rem 0.7rem 1rem 0.7rem; }
+  .subject-row { flex-direction: column; gap: 0.5rem; }
+  .converter-row { flex-direction: column; gap: 0.5rem; }
+  .converter-row input, .converter-row select { margin-right: 0; width: 100%; }
+}
