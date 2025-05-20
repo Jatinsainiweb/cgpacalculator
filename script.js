@@ -1,107 +1,257 @@
-// --- CGPA Calculator ---
-const subjectsContainer = document.getElementById('subjects-container');
-const addSubjectBtn = document.getElementById('add-subject');
-const cgpaResult = document.getElementById('cgpaResult');
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab Switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const calculatorPanels = document.querySelectorAll('.calculator-panel');
 
-function calculateCGPA() {
-  const rows = subjectsContainer.querySelectorAll('.subject-row');
-  let totalGrade = 0, count = 0;
-  rows.forEach(row => {
-    const gradeInput = row.querySelector('.subject-grade');
-    const grade = parseFloat(gradeInput.value);
-    if (!isNaN(grade)) {
-      totalGrade += grade;
-      count++;
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            calculatorPanels.forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`${btn.dataset.tab}-calculator`).classList.add('active');
+        });
+    });
+
+    // General Calculator
+    const semesterInputs = document.getElementById('semester-inputs');
+    const addSemesterBtn = document.getElementById('add-semester');
+    const calculateBtn = document.getElementById('calculate-cgpa');
+    const conversionFormula = document.getElementById('conversion-formula');
+    let semesterCount = 1;
+
+    // Add course to a semester
+    function addCourse(semesterDiv) {
+        const courseInputs = semesterDiv.querySelector('.course-inputs');
+        const newCourse = document.createElement('div');
+        newCourse.className = 'course';
+        newCourse.innerHTML = `
+            <input type="text" placeholder="Course Name">
+            <input type="number" placeholder="Percentage" min="0" max="100">
+        `;
+        courseInputs.appendChild(newCourse);
     }
-  });
-  const cgpa = count ? (totalGrade / count) : 0;
-  cgpaResult.textContent = cgpa.toFixed(2);
-}
 
-function addSubjectRow(name = '', grade = '', percentage = '') {
-  const row = document.createElement('div');
-  row.className = 'subject-row';
-  row.innerHTML = `
-    <input type="text" class="subject-name" placeholder="Subject Name" value="${name}" required>
-    <input type="number" class="subject-grade" placeholder="Grade (e.g. 9.2)" min="0" max="10" step="0.01" value="${grade}" required>
-    <input type="number" class="subject-percentage" placeholder="Percentage (e.g. 92)" min="0" max="100" step="0.01" value="${percentage}" required>
-    <button type="button" class="remove-subject" title="Remove Subject">&minus;</button>
-  `;
-  row.querySelector('.remove-subject').onclick = () => {
-    if (subjectsContainer.children.length > 1) {
-      row.remove();
-      calculateCGPA();
+    // Add new semester
+    function addSemester() {
+        semesterCount++;
+        const newSemester = document.createElement('div');
+        newSemester.className = 'semester';
+        newSemester.innerHTML = `
+            <h3>Semester ${semesterCount}</h3>
+            <div class="course-inputs">
+                <div class="course">
+                    <input type="text" placeholder="Course Name">
+                    <input type="number" placeholder="Credits" min="1" max="6">
+                    <input type="number" placeholder="Grade Points" min="0" max="10">
+                </div>
+            </div>
+            <button class="add-course">+ Add Course</button>
+        `;
+        semesterInputs.appendChild(newSemester);
+
+        // Add event listener to the new "Add Course" button
+        const addCourseBtn = newSemester.querySelector('.add-course');
+        addCourseBtn.addEventListener('click', () => addCourse(newSemester));
     }
-  };
-  row.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', calculateCGPA);
-  });
-  subjectsContainer.appendChild(row);
-}
 
-addSubjectBtn.onclick = () => {
-  addSubjectRow();
-};
+    // Calculate CGPA
+    function calculateCGPA() {
+        let totalPercentage = 0;
+        let courseCount = 0;
+        const divisor = parseFloat(conversionFormula.value);
 
-// Initial row already exists, add listeners
-subjectsContainer.querySelectorAll('input').forEach(input => {
-  input.addEventListener('input', calculateCGPA);
-});
-subjectsContainer.querySelector('.remove-subject').onclick = function() {
-  if (subjectsContainer.children.length > 1) {
-    this.parentElement.remove();
-    calculateCGPA();
-  }
-};
+        // Loop through all semesters
+        document.querySelectorAll('.semester').forEach(semester => {
+            // Loop through all courses in the semester
+            semester.querySelectorAll('.course').forEach(course => {
+                const inputs = course.querySelectorAll('input');
+                const percentage = parseFloat(inputs[1].value) || 0;
 
-// --- CGPA to Percentage Converter ---
-const cgpaInput = document.getElementById('cgpaInput');
-const universitySelect = document.getElementById('universitySelect');
-const percentageResult = document.getElementById('percentageResult');
+                if (percentage) {
+                    totalPercentage += percentage;
+                    courseCount++;
+                }
+            });
+        });
 
-const cgpaToPercentageFormulas = {
-  vit: cgpa => cgpa * 10,
-  srm: cgpa => (cgpa - 0.5) * 10,
-  du: cgpa => (cgpa - 0.5) * 9.5 + 5,
-  aktu: cgpa => cgpa * 10,
-  jntu: cgpa => (cgpa - 0.75) * 10
-};
+        // Calculate average percentage
+        const avgPercentage = courseCount ? (totalPercentage / courseCount).toFixed(2) : 0;
+        
+        // Calculate CGPA using selected formula
+        const cgpa = (avgPercentage / divisor).toFixed(2);
+        document.getElementById('cgpa-result').textContent = cgpa;
+        document.getElementById('percentage-result').textContent = avgPercentage;
 
-function updatePercentageResult() {
-  const cgpa = parseFloat(cgpaInput.value);
-  const university = universitySelect.value;
-  let percentage = 0;
-  if (!isNaN(cgpa) && cgpaToPercentageFormulas[university]) {
-    percentage = cgpaToPercentageFormulas[university](cgpa);
-    if (percentage < 0) percentage = 0;
-    if (percentage > 100) percentage = 100;
-  }
-  percentageResult.textContent = percentage.toFixed(2);
-}
+        // Update performance scale highlighting
+        updatePerformanceScale(parseFloat(cgpa));
+    }
 
-cgpaInput.addEventListener('input', updatePercentageResult);
-universitySelect.addEventListener('change', updatePercentageResult);
+    // Update performance scale
+    function updatePerformanceScale(cgpa) {
+        const scaleItems = document.querySelectorAll('.scale-item');
+        scaleItems.forEach(item => item.style.opacity = '0.5');
 
-// --- Percentage to CGPA Converter ---
-const percentageInput = document.getElementById('percentageInput');
-const cgpaFromPercentage = document.getElementById('cgpaFromPercentage');
+        if (cgpa >= 9.0) {
+            document.querySelector('.scale-item.excellent').style.opacity = '1';
+        } else if (cgpa >= 8.0) {
+            document.querySelector('.scale-item.very-good').style.opacity = '1';
+        } else if (cgpa >= 7.0) {
+            document.querySelector('.scale-item.good').style.opacity = '1';
+        } else if (cgpa >= 6.0) {
+            document.querySelector('.scale-item.average').style.opacity = '1';
+        } else {
+            document.querySelector('.scale-item.poor').style.opacity = '1';
+        }
+    }
 
-function updateCGPAFromPercentage() {
-  const percentage = parseFloat(percentageInput.value);
-  let cgpa = 0;
-  if (!isNaN(percentage)) {
-    cgpa = percentage / 10;
-    if (cgpa > 10) cgpa = 10;
-    if (cgpa < 0) cgpa = 0;
-  }
-  cgpaFromPercentage.textContent = cgpa.toFixed(2);
-}
+    // Quick Conversion Calculator
+    const percentageInput = document.getElementById('percentage-input');
+    const cgpaInput = document.getElementById('cgpa-input');
+    const convertBtns = document.querySelectorAll('.convert-btn');
 
-percentageInput.addEventListener('input', updateCGPAFromPercentage);
+    convertBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const parent = this.parentElement;
+            const resultSpan = parent.querySelector('.quick-result span');
+            const divisor = parseFloat(conversionFormula.value);
 
-// --- Animation on load ---
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    document.body.style.opacity = 1;
-  }, 100);
+            if (parent.querySelector('#percentage-input')) {
+                const percentage = parseFloat(percentageInput.value) || 0;
+                resultSpan.textContent = (percentage / divisor).toFixed(2);
+            } else {
+                const cgpa = parseFloat(cgpaInput.value) || 0;
+                resultSpan.textContent = (cgpa * divisor).toFixed(2) + '%';
+            }
+        });
+    });
+
+    // University Calculators
+    const gradeContainers = {
+        vit: document.getElementById('vit-grades'),
+        srm: document.getElementById('srm-grades'),
+        aktu: document.getElementById('aktu-grades'),
+        jntu: document.getElementById('jntu-grades'),
+        ipu: document.getElementById('ipu-grades')
+    };
+
+    const gradeScales = {
+        vit: [
+            { grade: 'S', points: 10, range: '90-100' },
+            { grade: 'A', points: 9, range: '80-89' },
+            { grade: 'B', points: 8, range: '70-79' },
+            { grade: 'C', points: 7, range: '60-69' },
+            { grade: 'D', points: 6, range: '50-59' },
+            { grade: 'F', points: 0, range: '<50' }
+        ],
+        srm: [
+            { grade: 'O', points: 10, range: '90-100' },
+            { grade: 'A+', points: 9, range: '80-89' },
+            { grade: 'A', points: 8, range: '70-79' },
+            { grade: 'B+', points: 7, range: '60-69' },
+            { grade: 'B', points: 6, range: '50-59' },
+            { grade: 'F', points: 0, range: '<50' }
+        ],
+        aktu: [
+            { grade: 'A+', points: 10, range: '90-100' },
+            { grade: 'A', points: 9, range: '80-89' },
+            { grade: 'B+', points: 8, range: '70-79' },
+            { grade: 'B', points: 7, range: '60-69' },
+            { grade: 'C', points: 6, range: '50-59' },
+            { grade: 'F', points: 0, range: '<50' }
+        ],
+        jntu: [
+            { grade: 'O', points: 10, range: '90-100' },
+            { grade: 'A+', points: 9, range: '80-89' },
+            { grade: 'A', points: 8, range: '70-79' },
+            { grade: 'B', points: 7, range: '60-69' },
+            { grade: 'C', points: 6, range: '50-59' },
+            { grade: 'F', points: 0, range: '<50' }
+        ],
+        ipu: [
+            { grade: 'A+', points: 10, range: '90-100' },
+            { grade: 'A', points: 9, range: '80-89' },
+            { grade: 'B+', points: 8, range: '70-79' },
+            { grade: 'B', points: 7, range: '60-69' },
+            { grade: 'C', points: 6, range: '50-59' },
+            { grade: 'F', points: 0, range: '<50' }
+        ]
+    };
+
+    const conversionFormulas = {
+        vit: (cgpa) => (cgpa * 10) - 5,
+        srm: (cgpa) => cgpa * 10,
+        aktu: (cgpa) => cgpa * 10,
+        jntu: (cgpa) => (cgpa - 0.5) * 10,
+        ipu: (cgpa) => cgpa * 9.5
+    };
+
+    function addGradeRow(container, university) {
+        const row = document.createElement('div');
+        row.className = 'grade-row';
+        const gradeOptions = gradeScales[university]
+            .map(g => `<option value="${g.points}">${g.grade} (${g.points}) - ${g.range}%</option>`)
+            .join('');
+
+        row.innerHTML = `
+            <input type="text" placeholder="Course Name">
+            <input type="number" placeholder="Credits" min="1" max="4">
+            <select>${gradeOptions}</select>
+        `;
+        container.appendChild(row);
+    }
+
+    // Add event listeners for all university calculators
+    const addGradeRowBtns = document.querySelectorAll('.add-grade-row');
+    const calculateUniversityBtns = document.querySelectorAll('.calculate-university');
+
+    addGradeRowBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const container = btn.previousElementSibling.querySelector('.grade-inputs');
+            const university = container.id.split('-')[0];
+            addGradeRow(container, university);
+        });
+    });
+
+    calculateUniversityBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const university = btn.dataset.university;
+            const container = document.getElementById(`${university}-grades`);
+            const resultDiv = btn.nextElementSibling;
+            
+            let totalPoints = 0;
+            let totalCredits = 0;
+            
+            container.querySelectorAll('.grade-row').forEach(row => {
+                const credits = parseFloat(row.querySelector('input[type="number"]').value) || 0;
+                const points = parseFloat(row.querySelector('select').value) || 0;
+                
+                if (credits && points) {
+                    totalPoints += credits * points;
+                    totalCredits += credits;
+                }
+            });
+            
+            const cgpa = totalCredits ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+            const percentage = totalCredits ? conversionFormulas[university](parseFloat(cgpa)).toFixed(2) : '0.00';
+            
+            resultDiv.querySelector('p:first-child span').textContent = cgpa;
+            resultDiv.querySelector('p:last-child span').textContent = percentage + '%';
+        });
+    });
+
+    // Initialize first grade row for each university calculator
+    Object.keys(gradeContainers).forEach(university => {
+        if (gradeContainers[university]) {
+            addGradeRow(gradeContainers[university], university);
+        }
+    });
+
+    // Event Listeners for General Calculator
+    addSemesterBtn.addEventListener('click', addSemester);
+    calculateBtn.addEventListener('click', calculateCGPA);
+
+    // Add event listener to the first "Add Course" button
+    document.querySelector('.add-course').addEventListener('click', () => {
+        addCourse(document.querySelector('.semester'));
+    });
 });

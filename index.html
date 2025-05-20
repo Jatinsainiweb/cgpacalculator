@@ -1,167 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Responsive, SEO-optimized CGPA Calculator and Converter for Indian Universities. Calculate CGPA, convert CGPA to percentage, and vice versa in real-time.">
-  <title>CGPA Calculator & Converter | Indian Universities</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const themeToggle = document.createElement('button');
-      themeToggle.id = 'theme-toggle';
-      themeToggle.innerHTML = '🌙';
-      themeToggle.style.position = 'fixed';
-      themeToggle.style.bottom = '20px';
-      themeToggle.style.right = '20px';
-      themeToggle.style.zIndex = '1000';
-      document.body.appendChild(themeToggle);
-      
-      themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        themeToggle.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
-        localStorage.setItem('theme', newTheme);
-      });
-      
-      // Check saved theme
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      themeToggle.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
-    });
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator – Convert CGPA to Percentage & GPA Online</title>
+    <meta name="description" content="Calculate your CGPA, SGPA, or convert CGPA to percentage instantly. Fast, accurate, and university-specific tools for Indian & international students.">
+    <meta name="keywords" content="cgpa calculator, sgpa to cgpa, cgpa to percentage, percentage to cgpa, gpa to percentage, online cgpa calculator, indian university cgpa converter, cgpa calculator India, cgpa to marks converter, engineering cgpa calculator, vit cgpa calculator, srm cgpa calculator, du cgpa calculator, ipu cgpa calculator, jntu cgpa calculator, manipal cgpa calculator, mumbai university cgpa calculator, anna university cgpa calculator, cgpa conversion tool, cgpa converter online, cgpa to grade point, grade calculator, btech cgpa calculator, mca cgpa calculator, mba cgpa calculator, cbse cgpa calculator, cgpa result calculator, simple cgpa calculator, ai-based cgpa calculator, responsive cgpa calculator">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="CGPA Calculator – Convert CGPA to Percentage & GPA Online">
+    <meta property="og:description" content="Calculate your CGPA, SGPA, or convert CGPA to percentage instantly. Fast, accurate, and university-specific tools for Indian & international students.">
+    <meta property="og:type" content="website">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="CGPA Calculator">
+    <meta name="language" content="English">
+    
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>CGPA Calculator & Converter</h1>
-    <p>Instantly calculate and convert CGPA & Percentage for top Indian universities</p>
-  </header>
-  <main>
-    <section id="cgpa-calculator" class="card">
-      <h2>CGPA Calculator</h2>
-      <form id="cgpaForm" autocomplete="off">
-        <div id="subjects-container">
-          <div class="subject-row">
-            <input type="text" class="subject-name" placeholder="Subject Name" required>
-            <input type="number" class="subject-grade" placeholder="Grade (e.g. 9.2)" min="0" max="10" step="0.01" required>
-            <input type="number" class="subject-percentage" placeholder="Percentage (e.g. 92)" min="0" max="100" step="0.01" required>
-            <button type="button" class="remove-subject" title="Remove Subject">&minus;</button>
-          </div>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>CGPA Calculator</h1>
+                <ul>
+                    <li><a href="#calculator">Calculator</a></li>
+                    <li><a href="#guide">Guide</a></li>
+                    <li><a href="#universities">Universities</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="container">
+                <h1>Calculate Your CGPA with Precision</h1>
+                <p>Trusted by thousands of students across India for accurate CGPA calculations and conversions</p>
+            </div>
+        </section>
+
+        <section id="calculator" class="calculator-section">
+            <div class="container">
+                <h2>CGPA Calculator</h2>
+                <div class="calculator-tabs">
+                    <button class="tab-btn active" data-tab="general">General Calculator</button>
+                    <button class="tab-btn" data-tab="vit">VIT</button>
+                    <button class="tab-btn" data-tab="srm">SRM</button>
+                    <button class="tab-btn" data-tab="aktu">AKTU</button>
+                    <button class="tab-btn" data-tab="jntu">JNTU</button>
+                    <button class="tab-btn" data-tab="ipu">IPU</button>
+                </div>
+
+                <!-- General Calculator -->
+                <div class="calculator-panel active" id="general-calculator">
+                    <div class="calculator-grid">
+                        <div class="calculator-form">
+                            <div class="university-select">
+                                <select id="conversion-formula">
+                                    <option value="9.5">Standard (÷ 9.5)</option>
+                                    <option value="10">Alternate (÷ 10)</option>
+                                </select>
+                            </div>
+                            <div id="semester-inputs">
+                                <div class="semester">
+                                    <h3>Semester 1</h3>
+                                    <div class="course-inputs">
+                                        <div class="course">
+                                            <input type="text" placeholder="Course Name">
+                                            <input type="number" placeholder="Percentage" min="0" max="100">
+                                        </div>
+                                    </div>
+                                    <button class="add-course">+ Add Course</button>
+                                </div>
+                            </div>
+                            <button id="add-semester">+ Add Semester</button>
+                            <button id="calculate-cgpa" class="primary-button">Calculate CGPA</button>
+                        </div>
+                        <div class="results">
+                            <h3>Results</h3>
+                            <div class="result-display">
+                                <div class="result-card">
+                                    <div class="result-item">
+                                        <h4>CGPA</h4>
+                                        <span id="cgpa-result" class="result-value">0.00</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <h4>Percentage</h4>
+                                        <span id="percentage-result" class="result-value">0.00%</span>
+                                    </div>
+                                </div>
+                                <div class="grade-scale">
+                                    <h4>Performance Scale</h4>
+                                    <div class="scale-item excellent">9.0 - 10.0: Outstanding</div>
+                                    <div class="scale-item very-good">8.0 - 8.9: Very Good</div>
+                                    <div class="scale-item good">7.0 - 7.9: Good</div>
+                                    <div class="scale-item average">6.0 - 6.9: Average</div>
+                                    <div class="scale-item poor">Below 6.0: Need Improvement</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Conversion Calculator -->
+                <div class="calculator-panel" id="quick-conversion">
+                    <div class="quick-calc-grid">
+                        <div class="conversion-card">
+                            <h3>Percentage to CGPA</h3>
+                            <input type="number" id="percentage-input" placeholder="Enter Percentage" min="0" max="100">
+                            <button class="convert-btn">Convert</button>
+                            <div class="quick-result">CGPA: <span>0.00</span></div>
+                        </div>
+                        <div class="conversion-card">
+                            <h3>CGPA to Percentage</h3>
+                            <input type="number" id="cgpa-input" placeholder="Enter CGPA" min="0" max="10" step="0.01">
+                            <button class="convert-btn">Convert</button>
+                            <div class="quick-result">Percentage: <span>0.00%</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- University Specific Calculators -->
+                <div class="calculator-panel" id="vit-calculator">
+                    <div class="university-calculator">
+                        <h3>VIT Grade Point Calculator</h3>
+                        <div class="grade-input-grid">
+                            <div class="grade-row header">
+                                <span>Course</span>
+                                <span>Credits</span>
+                                <span>Grade</span>
+                            </div>
+                            <div class="grade-inputs" id="vit-grades">
+                                <!-- Rows will be added dynamically -->
+                            </div>
+                        </div>
+                        <button class="add-grade-row">+ Add Course</button>
+                        <button class="calculate-university">Calculate VIT CGPA</button>
+                    </div>
+                </div>
+
+                <!-- SRM Calculator -->
+                <div class="calculator-panel" id="srm-calculator">
+                    <div class="university-calculator">
+                        <h3>SRM Grade Point Calculator</h3>
+                        <div class="grade-input-grid">
+                            <div class="grade-row header">
+                                <span>Course</span>
+                                <span>Credits</span>
+                                <span>Grade</span>
+                            </div>
+                            <div class="grade-inputs" id="srm-grades">
+                                <!-- Rows will be added dynamically -->
+                            </div>
+                        </div>
+                        <button class="add-grade-row">+ Add Course</button>
+                        <button class="calculate-university" data-university="srm">Calculate SRM CGPA</button>
+                        <div class="university-result">
+                            <p>CGPA: <span>0.00</span></p>
+                            <p>Percentage: <span>0.00%</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AKTU Calculator -->
+                <div class="calculator-panel" id="aktu-calculator">
+                    <div class="university-calculator">
+                        <h3>AKTU Grade Point Calculator</h3>
+                        <div class="grade-input-grid">
+                            <div class="grade-row header">
+                                <span>Course</span>
+                                <span>Credits</span>
+                                <span>Grade</span>
+                            </div>
+                            <div class="grade-inputs" id="aktu-grades">
+                                <!-- Rows will be added dynamically -->
+                            </div>
+                        </div>
+                        <button class="add-grade-row">+ Add Course</button>
+                        <button class="calculate-university" data-university="aktu">Calculate AKTU CGPA</button>
+                        <div class="university-result">
+                            <p>CGPA: <span>0.00</span></p>
+                            <p>Percentage: <span>0.00%</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JNTU Calculator -->
+                <div class="calculator-panel" id="jntu-calculator">
+                    <div class="university-calculator">
+                        <h3>JNTU Grade Point Calculator</h3>
+                        <div class="grade-input-grid">
+                            <div class="grade-row header">
+                                <span>Course</span>
+                                <span>Credits</span>
+                                <span>Grade</span>
+                            </div>
+                            <div class="grade-inputs" id="jntu-grades">
+                                <!-- Rows will be added dynamically -->
+                            </div>
+                        </div>
+                        <button class="add-grade-row">+ Add Course</button>
+                        <button class="calculate-university" data-university="jntu">Calculate JNTU CGPA</button>
+                        <div class="university-result">
+                            <p>CGPA: <span>0.00</span></p>
+                            <p>Percentage: <span>0.00%</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IPU Calculator -->
+                <div class="calculator-panel" id="ipu-calculator">
+                    <div class="university-calculator">
+                        <h3>IPU Grade Point Calculator</h3>
+                        <div class="grade-input-grid">
+                            <div class="grade-row header">
+                                <span>Course</span>
+                                <span>Credits</span>
+                                <span>Grade</span>
+                            </div>
+                            <div class="grade-inputs" id="ipu-grades">
+                                <!-- Rows will be added dynamically -->
+                            </div>
+                        </div>
+                        <button class="add-grade-row">+ Add Course</button>
+                        <button class="calculate-university" data-university="ipu">Calculate IPU CGPA</button>
+                        <div class="university-result">
+                            <p>CGPA: <span>0.00</span></p>
+                            <p>Percentage: <span>0.00%</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="guide" class="guide-section">
+            <div class="container">
+                <h2>Comprehensive Guide to CGPA Calculation</h2>
+                
+                <article>
+                    <h3>Understanding CGPA in Indian Education System</h3>
+                    <p>CGPA (Cumulative Grade Point Average) is the cornerstone of academic evaluation in Indian universities. It's a sophisticated scoring system that provides a standardized way to assess student performance across different educational institutions and programs. Unlike the percentage system, CGPA offers a more nuanced approach to academic evaluation, taking into account the relative difficulty and importance of various courses.</p>
+
+                    <h3>CGPA Calculator: A Comprehensive Guide</h3>
+                    <p>Our CGPA calculator is designed to simplify the complex process of calculating your academic performance. Whether you're a student from VIT, SRM, AKTU, JNTU, or IPU, our calculator adapts to different university grading systems. Simply enter your course percentages, and the calculator will automatically compute your CGPA using standardized conversion formulas.</p>
+
+                    <h3>How to Calculate CGPA: Step-by-Step Guide</h3>
+                    <div class="calculation-guide">
+                        <p>The process of calculating CGPA varies across universities, but here's a general approach:</p>
+                        <ol>
+                            <li><strong>Percentage to Grade Points:</strong> Convert your percentage marks to grade points (usually on a 10-point scale)</li>
+                            <li><strong>Calculate Course GPA:</strong> For each course, multiply grade points by credit hours</li>
+                            <li><strong>Semester GPA:</strong> Sum up all course GPAs and divide by total credit hours</li>
+                            <li><strong>Final CGPA:</strong> Average of all semester GPAs</li>
+                        </ol>
+                        <p>For percentage to CGPA conversion, most Indian universities use the formula:</p>
+                        <ul>
+                            <li>CGPA = Percentage ÷ 9.5 (Most common)</li>
+                            <li>CGPA = Percentage ÷ 10 (Some universities)</li>
+                        </ul>
+                    </div>
+
+                    <h3>University-Specific CGPA Systems</h3>
+                    <div class="university-systems">
+                        <h4>VIT CGPA Calculator System</h4>
+                        <p>Vellore Institute of Technology (VIT) employs a sophisticated grading system:</p>
+                        <ul>
+                            <li>S Grade: 10 points (90-100%)</li>
+                            <li>A Grade: 9 points (80-89%)</li>
+                            <li>B Grade: 8 points (70-79%)</li>
+                            <li>C Grade: 7 points (60-69%)</li>
+                            <li>D Grade: 6 points (50-59%)</li>
+                            <li>F Grade: 0 points (< 50%)</li>
+                        </ul>
+                        <p>VIT's CGPA to percentage formula: Percentage = (CGPA × 10) - 5</p>
+
+                        <h4>SRM CGPA Calculator Methodology</h4>
+                        <p>SRM University uses a unique grading pattern:</p>
+                        <ul>
+                            <li>O Grade (Outstanding): 10 points</li>
+                            <li>A+ Grade: 9 points</li>
+                            <li>A Grade: 8 points</li>
+                            <li>B+ Grade: 7 points</li>
+                            <li>B Grade: 6 points</li>
+                            <li>C Grade: 5 points</li>
+                        </ul>
+                        <p>SRM's conversion formula: Percentage = CGPA × 10</p>
+
+                        <h4>AKTU CGPA Calculator Framework</h4>
+                        <p>Dr. A.P.J. Abdul Kalam Technical University (AKTU) implements a comprehensive grading system:</p>
+                        <ul>
+                            <li>Theory courses: 70% weightage</li>
+                            <li>Practical courses: 30% weightage</li>
+                            <li>Continuous assessment: 30-40% of total marks</li>
+                            <li>End semester examination: 60-70% of total marks</li>
+                        </ul>
+                        <p>AKTU's standard conversion: Percentage = CGPA × 10</p>
+
+                        <h4>JNTU CGPA Calculator Process</h4>
+                        <p>Jawaharlal Nehru Technological University's evaluation system includes:</p>
+                        <ul>
+                            <li>Mid-semester examinations: 25% weightage</li>
+                            <li>Assignments and quizzes: 5% weightage</li>
+                            <li>End semester examination: 70% weightage</li>
+                            <li>Lab courses: Separate grading with practical examinations</li>
+                        </ul>
+                        <p>JNTU's unique formula: Percentage = (CGPA - 0.5) × 10</p>
+
+                        <h4>IPU CGPA Calculator System</h4>
+                        <p>Guru Gobind Singh Indraprastha University follows:</p>
+                        <ul>
+                            <li>Absolute grading system</li>
+                            <li>Continuous evaluation process</li>
+                            <li>Practical and theory components evaluated separately</li>
+                            <li>Internal assessment: 25% weightage</li>
+                            <li>External examination: 75% weightage</li>
+                        </ul>
+                        <p>IPU standard conversion: Percentage = CGPA × 9.5</p>
+                    </div>
+
+                    <h3>CGPA to Percentage Calculator: Industry Standards</h3>
+                    <p>Different sectors and organizations have varying preferences for CGPA to percentage conversion:</p>
+                    <ul>
+                        <li><strong>Higher Education:</strong> Most universities abroad accept Indian CGPA with standard conversion formulas</li>
+                        <li><strong>Corporate Sector:</strong> Many companies use CGPA × 9.5 for percentage conversion</li>
+                        <li><strong>Public Sector:</strong> Generally follows university-specific conversion methods</li>
+                        <li><strong>Research Institutions:</strong> May have their own conversion criteria</li>
+                    </ul>
+
+                    <h3>Indian University CGPA Conversion: Best Practices</h3>
+                    <p>When converting between different university systems:</p>
+                    <ul>
+                        <li>Always check the specific university's conversion formula</li>
+                        <li>Maintain original documentation of both CGPA and percentage</li>
+                        <li>Use official conversion certificates when available</li>
+                        <li>Consider the context (job application, higher studies, etc.)</li>
+                    </ul>
+
+                    <h3>Maximizing Your Academic Performance</h3>
+                    <p>Tips for achieving and maintaining a high CGPA:</p>
+                    <ul>
+                        <li>Regular attendance and active participation</li>
+                        <li>Consistent study schedule throughout the semester</li>
+                        <li>Focus on understanding fundamental concepts</li>
+                        <li>Regular self-assessment using CGPA calculators</li>
+                        <li>Balanced approach to academics and co-curricular activities</li>
+                        <li>Effective time management and prioritization</li>
+                        <li>Seeking help from professors and peers when needed</li>
+                        <li>Maintaining detailed notes and study materials</li>
+                    </ul>
+
+                    <h3>Future Trends in Academic Evaluation</h3>
+                    <p>The education system is evolving with new trends:</p>
+                    <ul>
+                        <li>Integration of continuous assessment methods</li>
+                        <li>Emphasis on practical knowledge and skills</li>
+                        <li>Adoption of outcome-based education</li>
+                        <li>Standardization of grading systems across universities</li>
+                        <li>Digital transformation in academic evaluation</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CGPA Calculator. All rights reserved.</p>
         </div>
-        <button type="button" id="add-subject">+ Add Subject</button>
-      </form>
-      <div class="result">
-        <span>Your CGPA: <strong id="cgpaResult">0.00</strong></span>
-      </div>
-    </section>
-    <section id="cgpa-to-percentage" class="card">
-      <h2>CGPA to Percentage Converter</h2>
-      <div class="converter-row">
-        <!-- Add to all interactive elements -->
-        <!-- Update existing inputs -->
-        <input type="number" aria-label="Enter CGPA" id="cgpaInput" placeholder="Enter CGPA">
-        <select id="universitySelect">
-          <option value="vit">VIT</option>
-          <option value="srm">SRM</option>
-          <option value="du">Delhi University (DU)</option>
-          <option value="aktu">AKTU</option>
-          <option value="jntu">JNTU</option>
-        </select>
-      </div>
-      <div class="result">
-        <span>Percentage: <strong id="percentageResult">0.00</strong>%</span>
-      </div>
-    </section>
-    <section id="percentage-to-cgpa" class="card">
-      <h2>Percentage to CGPA Converter</h2>
-      <input type="number" id="percentageInput" placeholder="Enter Percentage" min="0" max="100" step="0.01">
-      <div class="result">
-        <span>CGPA: <strong id="cgpaFromPercentage">0.00</strong></span>
-      </div>
-    </section>
-    <section id="content" class="card">
-      <h2>Comprehensive Guide to CGPA Calculation & Conversion for Indian Universities</h2>
-      <h3>Introduction to CGPA and Its Importance in Indian Universities</h3>
-      <p>CGPA, or Cumulative Grade Point Average, is a standardized grading system used by most Indian universities to evaluate a student’s overall academic performance. Unlike traditional percentage-based systems, CGPA provides a more holistic view of a student’s achievements across all semesters. It is crucial for students aiming for higher education, placements, or government jobs, as many institutions and employers require CGPA scores for eligibility and selection.</p>
-      <h3>CGPA vs SGPA: Understanding the Difference</h3>
-      <p><strong>SGPA</strong> (Semester Grade Point Average) is the grade point average for a single semester, calculated based on the grades and credits of subjects taken in that semester. <strong>CGPA</strong> (Cumulative Grade Point Average) is the average of SGPAs across all semesters completed so far. While SGPA reflects performance in one term, CGPA represents the overall academic standing.</p>
-      <h4>CGPA vs Percentage</h4>
-      <p>Many students and recruiters still refer to percentages. While CGPA is a grade point on a scale (usually 10), percentage is a direct score out of 100. Universities often provide conversion formulas to translate CGPA into percentage for applications and eligibility criteria.</p>
-      <h3>How to Calculate CGPA with Subject Grades and Credits</h3>
-      <p>To calculate CGPA, you need the grade points and credits for each subject. The formula is:</p>
-      <pre><code>CGPA = (Sum of (Grade Points × Credits for each subject)) / (Total Credits)</code></pre>
-      <p>For example, if you have three subjects with grades 9, 8, and 7, and credits 4, 3, and 3 respectively:</p>
-      <pre><code>CGPA = (9×4 + 8×3 + 7×3) / (4+3+3) = (36+24+21)/10 = 81/10 = 8.1</code></pre>
-      <h3>How to Convert CGPA to Percentage for Top Indian Universities</h3>
-      <p>Each university may have its own formula for converting CGPA to percentage. Below are the most popular conversion formulas:</p>
-      <ul>
-        <li><strong>VIT (Vellore Institute of Technology):</strong> Percentage = (CGPA - 0.5) × 10</li>
-        <li><strong>SRM University:</strong> Percentage = (CGPA - 0.5) × 10</li>
-        <li><strong>Delhi University (DU):</strong> Percentage = CGPA × 9.5</li>
-        <li><strong>AKTU (Dr. A.P.J. Abdul Kalam Technical University):</strong> Percentage = CGPA × 10</li>
-        <li><strong>JNTU (Jawaharlal Nehru Technological University):</strong> Percentage = (CGPA - 0.75) × 10</li>
-        <li><strong>IPU (Guru Gobind Singh Indraprastha University):</strong> Percentage = (CGPA - 0.75) × 10</li>
-        <li><strong>Anna University:</strong> Percentage = (CGPA - 0.75) × 10</li>
-        <li><strong>Amity University:</strong> Percentage = CGPA × 10</li>
-        <li><strong>Lovely Professional University (LPU):</strong> Percentage = CGPA × 10</li>
-        <li><strong>Manipal University:</strong> Percentage = CGPA × 10</li>
-      </ul>
-      <h4>Detailed Conversion Formulas for Each University</h4>
-      <ul>
-        <li><strong>VIT CGPA to Percentage:</strong> Percentage = (CGPA - 0.5) × 10</li>
-        <li><strong>SRM CGPA to Percentage:</strong> Percentage = (CGPA - 0.5) × 10</li>
-        <li><strong>DU CGPA to Percentage:</strong> Percentage = CGPA × 9.5</li>
-        <li><strong>AKTU CGPA to Percentage:</strong> Percentage = CGPA × 10</li>
-        <li><strong>JNTU CGPA to Percentage:</strong> Percentage = (CGPA - 0.75) × 10</li>
-        <li><strong>IPU CGPA to Percentage:</strong> Percentage = (CGPA - 0.75) × 10</li>
-        <li><strong>Anna University CGPA to Percentage:</strong> Percentage = (CGPA - 0.75) × 10</li>
-        <li><strong>Amity University CGPA to Percentage:</strong> Percentage = CGPA × 10</li>
-        <li><strong>LPU CGPA to Percentage:</strong> Percentage = CGPA × 10</li>
-        <li><strong>Manipal University CGPA to Percentage:</strong> Percentage = CGPA × 10</li>
-      </ul>
-      <h3>How to Convert Percentage to CGPA</h3>
-      <p>To convert percentage to CGPA, use the reverse formula provided by your university. Commonly, for a 10-point scale:</p>
-      <ul>
-        <li><strong>General Formula:</strong> CGPA = Percentage / 9.5 (used by DU and many CBSE-based universities)</li>
-        <li><strong>VIT & SRM:</strong> CGPA = (Percentage / 10) + 0.5</li>
-        <li><strong>AKTU, Amity, LPU, Manipal:</strong> CGPA = Percentage / 10</li>
-        <li><strong>JNTU, IPU, Anna University:</strong> CGPA = (Percentage / 10) + 0.75</li>
-      </ul>
-      <h3>Frequently Asked Questions (FAQs)</h3>
-      <dl>
-        <dt><strong>How to calculate CGPA?</strong></dt>
-        <dd>To calculate CGPA, multiply each subject’s grade point by its credit, sum all these values, and divide by the total credits. Use our CGPA calculator for instant results.</dd>
-        <dt><strong>What is the CGPA to percentage formula for VIT?</strong></dt>
-        <dd>For VIT, Percentage = (CGPA - 0.5) × 10. Use our VIT CGPA calculator for quick conversion.</dd>
-        <dt><strong>How to convert SGPA to CGPA?</strong></dt>
-        <dd>CGPA is the weighted average of all SGPAs. Add all SGPAs and divide by the number of semesters.</dd>
-        <dt><strong>What is the difference between CGPA and SGPA?</strong></dt>
-        <dd>SGPA is for a single semester, while CGPA is the cumulative average across all semesters.</dd>
-        <dt><strong>How to use a CGPA calculator?</strong></dt>
-        <dd>Enter your subject grades and credits in the CGPA calculator above to get your CGPA instantly.</dd>
-        <dt><strong>What is the CGPA to percentage formula for SRM?</strong></dt>
-        <dd>For SRM, Percentage = (CGPA - 0.5) × 10. Try our SRM CGPA calculator for accurate results.</dd>
-        <dt><strong>How to convert percentage to CGPA?</strong></dt>
-        <dd>Divide your percentage by 9.5 (for DU/CBSE) or use the university-specific formula listed above.</dd>
-        <dt><strong>Is CGPA accepted for government jobs?</strong></dt>
-        <dd>Yes, but you may need to convert CGPA to percentage using your university’s official formula.</dd>
-        <dt><strong>CGPA calculator for AKTU?</strong></dt>
-        <dd>Use our AKTU CGPA calculator above. For AKTU, Percentage = CGPA × 10.</dd>
-        <dt><strong>What is the CGPA to percentage formula for JNTU?</strong></dt>
-        <dd>For JNTU, Percentage = (CGPA - 0.75) × 10. Use our JNTU CGPA calculator for easy conversion.</dd>
-      </dl>
-      <h3>Conclusion</h3>
-      <p>Understanding your CGPA and how to convert it to percentage is essential for academic and career planning. Use our CGPA calculator and conversion tools above for instant, accurate results tailored to your university’s requirements. For more details, refer to your university’s official guidelines or contact the examination cell.</p>
-      <p><strong>Keywords:</strong> CGPA calculator, CGPA to percentage calculator, how to calculate CGPA, VIT CGPA calculator, SRM CGPA calculator, AKTU CGPA calculator, JNTU CGPA calculator, IPU CGPA calculator, percentage to CGPA calculator, Indian university CGPA conversion.</p>
-    </section>
-  </main>
-  <footer>
-    <p>&copy; 2024 CGPA Calculator | Made with <span class="heart">&#10084;</span> for students</p>
-  </footer>
-  <script src="script.js"></script>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
