@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cgpacalculator.fun/sitemap.xml
