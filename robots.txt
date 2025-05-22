@@ -1,3 +1,8 @@
 User-agent: *
 Allow: /
+
+# Allow search engines to crawl all pages
+Disallow:
+
+# Sitemap location
 Sitemap: https://cgpacalculator.fun/sitemap.xml
