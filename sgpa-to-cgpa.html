@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA to CGPA Converter: Master Your Academic Scores with Precision</title>
+    <meta name="description" content="Convert your Semester Grade Point Average (SGPA) to Cumulative Grade Point Average (CGPA) with our easy-to-use calculator. Get accurate conversions, formulas, and expert tips.">
+    <meta name="keywords" content="SGPA to CGPA, semester GPA, cumulative GPA, SGPA calculator, CGPA conversion, academic calculator, GPA calculator, grade point average">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-in-out',
+                        'slideDown': 'slideDown 0.5s ease-in-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        .input-error {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .text-shadow-sm {
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
+        <div class="container mx-auto px-4 py-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-shadow-sm">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">SGPA to CGPA Converter</span>
+            </h1>
+            <p class="text-xl text-blue-100 max-w-2xl mx-auto">Master Your Academic Scores with Precision</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
+            <div class="flex items-center mb-6">
+                <div class="bg-blue-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-calculator text-blue-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">SGPA to CGPA Converter</h2>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
+                <div class="flex items-center text-blue-700 mb-2">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <p class="font-medium">CGPA Formula</p>
+                </div>
+                <p class="text-blue-800 font-mono bg-white p-2 rounded border border-blue-200 inline-block">
+                    CGPA = Sum of SGPA / Number of Semesters
+                </p>
+            </div>
+            
+            <div id="calculator" class="mb-6">
+                <div id="semesters-container">
+                    <div class="semester-row mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200 animate-fadeIn">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-semibold text-gray-700">Semester 1</h3>
+                            <button type="button" class="remove-semester text-red-500 hover:text-red-700 hidden">
+                                <i class="fas fa-times-circle"></i> Remove
+                            </button>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">SGPA</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-star text-gray-400"></i>
+                                </div>
+                                <input type="number" step="0.01" min="0" max="10" placeholder="Enter SGPA (0-10)" 
+                                       class="sgpa pl-10 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-4">
+                    <button id="add-semester" class="flex items-center text-primary-600 hover:text-primary-700 transition-colors">
+                        <i class="fas fa-plus-circle mr-1"></i> Add Semester
+                    </button>
+                    <button id="calculate" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center">
+                        <i class="fas fa-calculator mr-2"></i> Calculate CGPA
+                    </button>
+                </div>
+                
+                <div id="result" class="hidden animate-fadeIn mt-6">
+                    <div class="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl p-6 border border-blue-200">
+                        <div class="flex items-start">
+                            <div class="bg-blue-500 rounded-full p-3 text-white mr-4">
+                                <i class="fas fa-graduation-cap text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl text-blue-800 mb-2">Your Result</h3>
+                                <div class="flex items-baseline">
+                                    <p class="text-blue-700 mr-2">Your Cumulative GPA (CGPA):</p>
+                                    <div class="bg-white px-3 py-2 rounded-lg border border-blue-300 shadow-sm inline-flex items-center">
+                                        <span id="cgpa-value" class="text-2xl font-bold text-blue-700">0.00</span>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-blue-600 mt-3">Based on the semester SGPA values you provided</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl p-8 mt-8">
+            <div class="flex items-center mb-6">
+                <div class="bg-purple-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-tools text-secondary-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Related Tools</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="index.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-calculator mr-2 text-primary-500"></i>
+                        CGPA Calculator
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Calculate your CGPA from semester percentages</p>
+                </a>
+                <a href="cgpa-to-percentage.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-exchange-alt mr-2 text-primary-500"></i>
+                        CGPA to Percentage
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Convert your CGPA to percentage marks easily</p>
+                </a>
+                <a href="percentage-to-cgpa.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-sync-alt mr-2 text-primary-500"></i>
+                        Percentage to CGPA
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Convert percentage marks to CGPA scale</p>
+                </a>
+                <a href="vtu-gpa-calculator.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-university mr-2 text-primary-500"></i>
+                        VTU GPA Calculator
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Calculate GPA specific to VTU grading system</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-8 mt-8 overflow-hidden border border-gray-200">
+            <div class="flex items-center mb-5">
+                <div class="bg-blue-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Introduction</h2>
+            </div>
+            <p class="text-gray-700 mb-4">
+                Your academic journey is a marathon, not a sprint—and metrics like SGPA (Semester Grade Point Average) and CGPA (Cumulative Grade Point Average) are your mile markers. While SGPA reflects your performance term-by-term, CGPA consolidates your progress into a single score. Converting SGPA to CGPA manually can be error-prone, but with the right strategies and tools, you can ace this process. This guide offers fresh insights, unique examples, and actionable tips to simplify your GPA calculations. Let's get started!
+            </p>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-graduation-cap text-indigo-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">SGPA and CGPA Decoded</h2>
+            </div>
+            
+            <div class="bg-indigo-50 p-5 rounded-lg mb-6 border border-indigo-100">
+                <h3 class="font-bold text-indigo-800 text-xl mb-3">SGPA: Your Semester Report Card</h3>
+                <p class="text-gray-700 mb-3">
+                    SGPA measures your grades in a single semester. It's calculated by:
+                </p>
+                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-4">
+                    <li>Multiplying each subject's grade points (e.g., A = 9.0) by its credit hours.</li>
+                    <li>Summing these values.</li>
+                    <li>Dividing by the total credits for that term.</li>
+                </ul>
+                
+                <div class="bg-white p-4 rounded-lg border border-indigo-200 mb-4">
+                    <h4 class="font-semibold text-indigo-700 mb-2">Example:</h4>
+                    <p class="text-gray-700 mb-2">Digital Marketing: Grade 8.5 (3 credits)</p>
+                    <p class="text-gray-700 mb-2">Financial Accounting: Grade 9.2 (4 credits)</p>
+                    <p class="text-gray-700 font-mono">SGPA = [(8.5 × 3) + (9.2 × 4)] / (3 + 4) = (25.5 + 36.8) / 7 ≈ <span class="font-bold">8.9</span></p>
+                </div>
+                
+                <h3 class="font-bold text-indigo-800 text-xl mb-3">CGPA: The Big Picture</h3>
+                <p class="text-gray-700 mb-3">
+                    CGPA is your academic footprint across all semesters. It's the weighted average of every SGPA, adjusted for credit differences. For example, scoring 8.0, 8.7, and 9.1 SGPA over three terms with equal credits gives a CGPA of 8.6.
+                </p>
+            </div>
+            
+            <div class="overflow-x-auto mb-6">
+                <table class="w-full border-collapse bg-white border border-gray-300 rounded-lg">
+                    <thead>
+                        <tr class="bg-blue-100">
+                            <th class="p-3 text-left font-bold text-blue-800 border-b border-gray-300">Aspect</th>
+                            <th class="p-3 text-left font-bold text-blue-800 border-b border-gray-300">SGPA</th>
+                            <th class="p-3 text-left font-bold text-blue-800 border-b border-gray-300">CGPA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-3 border-b border-gray-200 font-medium">Timeframe</td>
+                            <td class="p-3 border-b border-gray-200">Single semester</td>
+                            <td class="p-3 border-b border-gray-200">Entire degree program</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-b border-gray-200 font-medium">Flexibility</td>
+                            <td class="p-3 border-b border-gray-200">Changes every term</td>
+                            <td class="p-3 border-b border-gray-200">Evolves gradually</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-b border-gray-200 font-medium">Use Cases</td>
+                            <td class="p-3 border-b border-gray-200">Internship eligibility</td>
+                            <td class="p-3 border-b border-gray-200">Job placements, higher education</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-gray-700 italic">Pro Tip: Track both metrics using our CGPA Calculator for a holistic view!</p>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-green-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-calculator text-green-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Converting SGPA to CGPA: Formulas & Fresh Examples</h2>
+            </div>
+            
+            <div class="bg-green-50 p-5 rounded-lg mb-6 border border-green-100">
+                <h3 class="font-bold text-green-800 text-xl mb-3">The Weighted Average Formula</h3>
+                <p class="text-gray-700 font-mono text-center bg-white p-3 rounded border border-green-200 mb-4">CGPA = Σ (SGPA × Semester Credits) ÷ Total Credits</p>
+                
+                <h3 class="font-bold text-green-800 text-xl mb-3">Real-World Scenarios</h3>
+                
+                <div class="bg-white p-4 rounded-lg border border-green-200 mb-4">
+                    <h4 class="font-semibold text-green-700 mb-2">Case 1: Engineering Student (Mixed Credits)</h4>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-3">
+                        <li>Semester 1: SGPA 8.2, Credits 24 (includes lab work)</li>
+                        <li>Semester 2: SGPA 7.9, Credits 20</li>
+                        <li>Semester 3: SGPA 9.0, Credits 22 (project-heavy term)</li>
+                    </ul>
+                    <p class="text-gray-700 font-medium mb-1">Calculation:</p>
+                    <p class="text-gray-700 font-mono">Total Credits = 24 + 20 + 22 = 66</p>
+                    <p class="text-gray-700 font-mono">Total Grade Points = (8.2×24) + (7.9×20) + (9.0×22) = 196.8 + 158 + 198 = <span class="font-bold">552.8</span></p>
+                    <p class="text-gray-700 font-mono">CGPA = 552.8 / 66 ≈ <span class="font-bold">8.38</span></p>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg border border-green-200 mb-4">
+                    <h4 class="font-semibold text-green-700 mb-2">Case 2: Liberal Arts Student (Equal Credits)</h4>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-3">
+                        <li>All semesters: 18 credits each</li>
+                        <li>SGPAs: 8.5, 8.8, 9.2, 8.6</li>
+                    </ul>
+                    <p class="text-gray-700 font-medium mb-1">Calculation:</p>
+                    <p class="text-gray-700 font-mono">CGPA = (8.5 + 8.8 + 9.2 + 8.6) / 4 = <span class="font-bold">8.78</span></p>
+                </div>
+                
+                <h3 class="font-bold text-green-800 text-xl mb-3">Why Use an SGPA to CGPA Calculator?</h3>
+                <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                    <li><span class="font-medium">Error-Free Math:</span> Avoid mistakes in weighted averages.</li>
+                    <li><span class="font-medium">Adaptability:</span> Handles 10-point, 4.0 GPA, and hybrid systems.</li>
+                    <li><span class="font-medium">Time Efficiency:</span> Results in seconds, not hours.</li>
+                    <li><span class="font-medium">Goal Setting:</span> Test how future grades impact your CGPA.</li>
+                </ul>
+            </div>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-purple-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-question-circle text-purple-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">FAQs: Beyond the Basics</h2>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">1. "Can I skip a semester's SGPA in CGPA calculation?"</h3>
+                    <p class="text-gray-700">No! CGPA includes all completed semesters. Omitting one inflates your score unfairly.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">2. "Do startups care about SGPA?"</h3>
+                    <p class="text-gray-700">Some startups review SGPA to gauge recent performance, but most prioritize skills and projects.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">3. "How to improve a low CGPA?"</h3>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                        <li>Target high-credit courses for better grade impact.</li>
+                        <li>Retake poorly scored subjects (if allowed).</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">4. "What's the CGPA equivalent of a 3.5 GPA?"</h3>
+                    <p class="text-gray-700 mb-2">On a 4.0 to 10.0 scale:</p>
+                    <p class="text-gray-700 font-mono">CGPA = (3.5 / 4.0) × 10 = <span class="font-bold">8.75</span></p>
+                    <p class="text-gray-700 italic">Use our Percentage to CGPA tool for precise conversions.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">5. "Is SGPA or CGPA better for scholarships?"</h3>
+                    <p class="text-gray-700">Most scholarships require CGPA, but term-specific grants may ask for SGPA.</p>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 p-5 rounded-lg mb-6 border border-blue-100">
+                <h3 class="font-bold text-blue-800 text-xl mb-3">Regional Grading Nuances</h3>
+                <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                    <li><span class="font-medium">India:</span> Uses 10-point CGPA with a 9.5 multiplier for percentages.</li>
+                    <li><span class="font-medium">USA:</span> Prefers 4.0 GPA, but universities convert CGPA during admissions.</li>
+                    <li><span class="font-medium">Germany:</span> Recognizes 1.0–4.0 scales (1.0 = excellent).</li>
+                </ul>
+            </div>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-blue-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-link text-blue-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Conclusion</h2>
+            </div>
+            
+            <p class="text-gray-700 mb-6">
+                Mastering SGPA to CGPA conversions isn't just about numbers—it's about owning your academic narrative. With tailored formulas, unique examples, and digital tools, you can track your progress effortlessly. Ready to take control? Explore our calculators and transform your GPA journey today!
+            </p>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <p class="text-center text-gray-400">Used by university students globally</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const semestersContainer = document.getElementById('semesters-container');
+            const addSemesterBtn = document.getElementById('add-semester');
+            const calculateBtn = document.getElementById('calculate');
+            const resultDiv = document.getElementById('result');
+            const cgpaValueSpan = document.getElementById('cgpa-value');
+            
+            // Counter for semester numbering
+            let semesterCount = 1;
+            
+            // Add a new semester row
+            addSemesterBtn.addEventListener('click', function() {
+                semesterCount++;
+                const newRow = document.createElement('div');
+                newRow.className = 'semester-row mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200 animate-fadeIn';
+                newRow.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-semibold text-gray-700">Semester ${semesterCount}</h3>
+                        <button type="button" class="remove-semester text-red-500 hover:text-red-700">
+                            <i class="fas fa-times-circle"></i> Remove
+                        </button>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">SGPA</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-star text-gray-400"></i>
+                            </div>
+                            <input type="number" step="0.01" min="0" max="10" placeholder="Enter SGPA (0-10)" 
+                                   class="sgpa pl-10 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all" required>
+                        </div>
+                    </div>
+                `;
+                semestersContainer.appendChild(newRow);
+                
+                // Show remove button for first semester if we have more than one
+                if (semesterCount === 2) {
+                    document.querySelector('.semester-row .remove-semester').classList.remove('hidden');
+                }
+                
+                // Add event listener to the new remove button
+                const removeButton = newRow.querySelector('.remove-semester');
+                removeButton.addEventListener('click', function() {
+                    newRow.remove();
+                    semesterCount--;
+                    
+                    // Update semester numbers
+                    const semesterRows = document.querySelectorAll('.semester-row');
+                    semesterRows.forEach((row, index) => {
+                        row.querySelector('h3').textContent = `Semester ${index + 1}`;
+                    });
+                    
+                    // Hide remove button if only one semester left
+                    if (semesterCount === 1) {
+                        document.querySelector('.semester-row .remove-semester').classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Calculate CGPA
+            calculateBtn.addEventListener('click', () => {
+                const rows = document.querySelectorAll('.semester-row');
+                let totalSGPA = 0;
+                let semesterCount = 0;
+                let isValid = true;
+                
+                // Reset any previous errors
+                document.querySelectorAll('.sgpa').forEach(input => {
+                    input.classList.remove('border-red-500');
+                    input.classList.remove('input-error');
+                });
+                
+                rows.forEach(row => {
+                    const sgpaInput = row.querySelector('.sgpa');
+                    const sgpa = parseFloat(sgpaInput.value);
+                    
+                    // Validate inputs
+                    if (isNaN(sgpa) || sgpa < 0 || sgpa > 10) {
+                        isValid = false;
+                        sgpaInput.classList.add('border-red-500');
+                        sgpaInput.classList.add('input-error');
+                        // Shake animation for invalid inputs
+                        sgpaInput.animate([
+                            { transform: 'translateX(0px)' },
+                            { transform: 'translateX(-5px)' },
+                            { transform: 'translateX(5px)' },
+                            { transform: 'translateX(-5px)' },
+                            { transform: 'translateX(0px)' }
+                        ], {
+                            duration: 300
+                        });
+                    } else {
+                        totalSGPA += sgpa;
+                        semesterCount++;
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Please enter valid SGPA values (0-10) for all semesters.');
+                    return;
+                }
+                
+                if (semesterCount === 0) {
+                    alert('Please add at least one semester with a valid SGPA.');
+                    return;
+                }
+                
+                // Calculate CGPA
+                const cgpa = totalSGPA / semesterCount;
+                
+                // Display result with animation
+                resultDiv.classList.remove('hidden');
+                cgpaValueSpan.textContent = cgpa.toFixed(2);
+                
+                // Scroll to result
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Add flash effect to result
+                resultDiv.animate([
+                    { backgroundColor: 'rgba(219, 234, 254, 0.8)' }, // blue-100 with opacity
+                    { backgroundColor: 'transparent' }
+                ], {
+                    duration: 1000
+                });
+            });
+        });
+    </script>
+</body>
+</html>

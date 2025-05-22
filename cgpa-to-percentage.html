@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA to Percentage Calculator: Accurate Conversion for Indian Students</title>
+    <meta name="description" content="Convert your CGPA to percentage marks with our accurate calculator. Get university-specific conversions for CBSE, VTU, Anna University and more. Free & instant results.">
+    <meta name="keywords" content="CGPA to percentage calculator, convert CGPA to percentage CBSE, VTU CGPA to percentage, Anna University percentage calculator, academic conversion, grade point conversion">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-in-out',
+                        'slideDown': 'slideDown 0.5s ease-in-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        .input-error {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .text-shadow-sm {
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
+        <div class="container mx-auto px-4 py-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-shadow-sm">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">CGPA to Percentage Calculator</span>
+            </h1>
+            <p class="text-xl text-blue-100 max-w-2xl mx-auto">Accurate Conversion for Indian Students</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
+            <div class="flex items-center mb-6">
+                <div class="bg-blue-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-calculator text-blue-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">CGPA to Percentage Converter</h2>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
+                <div class="flex items-center text-blue-700 mb-2">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <p class="font-medium">Conversion Formula</p>
+                </div>
+                <p class="text-blue-800 font-mono bg-white p-2 rounded border border-blue-200 inline-block">
+                    Percentage = CGPA × 9.5
+                </p>
+            </div>
+            
+            <div id="calculator" class="mb-6">
+                <div class="mb-5 bg-gray-50 p-5 rounded-lg border border-gray-200">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter your CGPA (0-10)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-graduation-cap text-gray-400"></i>
+                        </div>
+                        <input type="number" id="cgpa-input" step="0.01" min="0" max="10" placeholder="Enter CGPA (0-10)" 
+                               class="pl-10 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all" required>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Enter your CGPA on a 10-point scale</p>
+                </div>
+                
+                <div class="text-center mb-5">
+                    <button id="calculate" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors flex items-center mx-auto">
+                        <i class="fas fa-calculator mr-2"></i> Convert to Percentage
+                    </button>
+                </div>
+                
+                <div id="result" class="hidden animate-fadeIn">
+                    <div class="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl p-6 border border-blue-200">
+                        <div class="flex items-start">
+                            <div class="bg-blue-500 rounded-full p-3 text-white mr-4">
+                                <i class="fas fa-percent text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl text-blue-800 mb-2">Your Result</h3>
+                                <div class="flex items-baseline">
+                                    <p class="text-blue-700 mr-2">Your Percentage:</p>
+                                    <div class="bg-white px-3 py-2 rounded-lg border border-blue-300 shadow-sm inline-flex items-center">
+                                        <span id="percentage-value" class="text-2xl font-bold text-blue-700">0.00</span>
+                                        <span class="ml-1 text-gray-500">%</span>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-blue-600 mt-3">Based on the standard conversion formula (CGPA × 9.5)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl p-8 mt-8">
+            <div class="flex items-center mb-6">
+                <div class="bg-purple-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-tools text-secondary-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Related Tools</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="index.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-calculator mr-2 text-primary-500"></i>
+                        CGPA Calculator
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Calculate your CGPA from semester percentages</p>
+                </a>
+                <a href="sgpa-to-cgpa.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-exchange-alt mr-2 text-primary-500"></i>
+                        SGPA to CGPA
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Convert your semester GPA to cumulative GPA</p>
+                </a>
+                <a href="percentage-to-cgpa.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-sync-alt mr-2 text-primary-500"></i>
+                        Percentage to CGPA
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Convert percentage marks to CGPA scale</p>
+                </a>
+                <a href="vtu-gpa-calculator.html" class="group block p-5 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-lg transition-all overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500 group-hover:w-full opacity-10 group-hover:opacity-20 transition-all duration-300"></div>
+                    <h3 class="font-semibold text-lg text-primary-700 group-hover:text-primary-800 transition-colors flex items-center">
+                        <i class="fas fa-university mr-2 text-primary-500"></i>
+                        VTU GPA Calculator
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-2">Calculate GPA specific to VTU grading system</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-8 mt-8 overflow-hidden border border-gray-200">
+            <div class="flex items-center mb-5">
+                <div class="bg-blue-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Introduction</h2>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="font-bold text-gray-800 text-xl mb-3">Understanding CGPA</h3>
+                <p class="text-gray-700 mb-4">
+                    CGPA (Cumulative Grade Point Average) is a 10-point grading system used by Indian universities like CBSE, VTU, and Anna University to evaluate overall academic performance. It averages your grades across all semesters, providing a consolidated score. For instance, a 9.0 CGPA reflects consistent excellence.
+                </p>
+                
+                <h3 class="font-bold text-gray-800 text-xl mb-3">Why Convert CGPA to Percentage?</h3>
+                <p class="text-gray-700 mb-3">Percentages are crucial for:</p>
+                
+                <ul class="list-disc pl-5 text-gray-700 space-y-2 mb-4">
+                    <li><span class="font-medium">Job Applications:</span> Companies like Infosys and Wipro often require a minimum of 60% for eligibility.</li>
+                    <li><span class="font-medium">Higher Education Abroad:</span> Universities in the USA, UK, or Australia need percentage equivalents for admissions.</li>
+                    <li><span class="font-medium">Government Exams:</span> UPSC, SSC, and state-level exams mandate percentage-based criteria.</li>
+                </ul>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">Example:</h4>
+                    <p class="text-gray-700">A CBSE student with 8.5 CGPA converts it to percentage as:</p>
+                    <p class="font-mono text-gray-800 mt-2">8.5 × 9.5 = <span class="font-bold">80.75%</span></p>
+                </div>
+            </div>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-green-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-calculator text-green-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Formula Variations Across Institutions</h2>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="font-bold text-gray-800 text-xl mb-3">Standard CBSE Formula</h3>
+                <p class="text-gray-700 mb-3">CBSE's widely accepted formula is:</p>
+                <p class="font-mono text-gray-800 bg-green-50 p-3 rounded-lg border border-green-200 mb-4 text-center">Percentage = CGPA × 9.5</p>
+                <p class="text-gray-700 mb-4">This multiplier (9.5) aligns the 10-point CGPA scale with the traditional 95% maximum percentage.</p>
+                
+                <h3 class="font-bold text-gray-800 text-xl mb-3">University-Specific Multipliers</h3>
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full border-collapse bg-white border border-gray-300 rounded-lg">
+                        <thead>
+                            <tr class="bg-green-100">
+                                <th class="p-3 text-left font-bold text-green-800 border-b border-gray-300">University</th>
+                                <th class="p-3 text-left font-bold text-green-800 border-b border-gray-300">Formula</th>
+                                <th class="p-3 text-left font-bold text-green-800 border-b border-gray-300">Example (8.0 CGPA)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 font-medium">Mumbai University</td>
+                                <td class="p-3 border-b border-gray-200">CGPA × 9.5 (Engineering)</td>
+                                <td class="p-3 border-b border-gray-200">8.0 × 9.5 = 76%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 font-medium">VTU</td>
+                                <td class="p-3 border-b border-gray-200">CGPA × 10</td>
+                                <td class="p-3 border-b border-gray-200">8.0 × 10 = 80%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 font-medium">AKTU</td>
+                                <td class="p-3 border-b border-gray-200">(CGPA – 0.5) × 10</td>
+                                <td class="p-3 border-b border-gray-200">(8.0 – 0.5) × 10 = 75%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 font-medium">Anna University</td>
+                                <td class="p-3 border-b border-gray-200">CGPA × 10</td>
+                                <td class="p-3 border-b border-gray-200">8.0 × 10 = 80%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <p class="font-medium text-yellow-800 mb-1">Always Verify:</p>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                        <li>Check your academic transcript or university portal for official guidelines.</li>
+                        <li>Contact your college's examination department for clarity.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-book text-indigo-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Step-by-Step Conversion Guide</h2>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="font-bold text-gray-800 text-xl mb-3">Manual Calculation</h3>
+                <ol class="list-decimal pl-5 text-gray-700 space-y-2 mb-4">
+                    <li>Identify Your CGPA: E.g., 7.6/10.</li>
+                    <li>Apply the Multiplier:
+                        <ul class="list-disc pl-5 mt-1 mb-1">
+                            <li>For CBSE: 7.6 × 9.5 = 72.2%</li>
+                            <li>For VTU: 7.6 × 10 = 76%</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h3 class="font-bold text-gray-800 text-xl mb-3">Real-World Examples</h3>
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full border-collapse bg-white border border-gray-300 rounded-lg">
+                        <thead>
+                            <tr class="bg-indigo-100">
+                                <th class="p-3 text-left font-bold text-indigo-800 border-b border-gray-300">Scenario</th>
+                                <th class="p-3 text-left font-bold text-indigo-800 border-b border-gray-300">Calculation</th>
+                                <th class="p-3 text-left font-bold text-indigo-800 border-b border-gray-300">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200">CBSE Student (7.2 CGPA)</td>
+                                <td class="p-3 border-b border-gray-200">7.2 × 9.5</td>
+                                <td class="p-3 border-b border-gray-200 font-medium">68.4%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200">VTU Student (8.5 CGPA)</td>
+                                <td class="p-3 border-b border-gray-200">8.5 × 10</td>
+                                <td class="p-3 border-b border-gray-200 font-medium">85%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200">AKTU Student (9.0 CGPA)</td>
+                                <td class="p-3 border-b border-gray-200">(9.0 – 0.5) × 10</td>
+                                <td class="p-3 border-b border-gray-200 font-medium">85%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="font-bold text-gray-800 text-xl mb-3">Quick Reference Chart</h3>
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full border-collapse bg-white border border-gray-300 rounded-lg">
+                        <thead>
+                            <tr class="bg-blue-100">
+                                <th class="p-3 text-center font-bold text-blue-800 border-b border-gray-300">CGPA</th>
+                                <th class="p-3 text-center font-bold text-blue-800 border-b border-gray-300">CBSE (×9.5)</th>
+                                <th class="p-3 text-center font-bold text-blue-800 border-b border-gray-300">VTU (×10)</th>
+                                <th class="p-3 text-center font-bold text-blue-800 border-b border-gray-300">AKTU [(CGPA – 0.5) ×10]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 text-center font-medium">6.5</td>
+                                <td class="p-3 border-b border-gray-200 text-center">61.75%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">65%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">60%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 text-center font-medium">7.8</td>
+                                <td class="p-3 border-b border-gray-200 text-center">74.1%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">78%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">73%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 text-center font-medium">8.4</td>
+                                <td class="p-3 border-b border-gray-200 text-center">79.8%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">84%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">79%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200 text-center font-medium">9.5</td>
+                                <td class="p-3 border-b border-gray-200 text-center">90.25%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">95%</td>
+                                <td class="p-3 border-b border-gray-200 text-center">90%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-purple-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-university text-purple-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">University-Specific Guidelines</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">1. CBSE Board</h3>
+                    <p class="text-gray-700 mb-1">Formula: CGPA × 9.5.</p>
+                    <p class="text-gray-700">Purpose: Used for Class 10th/12th results.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">2. Mumbai University (MU)</h3>
+                    <p class="text-gray-700 mb-1">Engineering: Follows CBSE's 9.5 multiplier.</p>
+                    <p class="text-gray-700">Arts/Science: Some courses use 7.1 (e.g., 8.0 CGPA = 56.8%).</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">3. Visvesvaraya Technological University (VTU)</h3>
+                    <p class="text-gray-700 mb-1">Formula: Direct scaling (CGPA × 10).</p>
+                    <p class="text-gray-700">Example: 7.5 CGPA = 75%.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">4. IP University (GGSIPU)</h3>
+                    <p class="text-gray-700">Formula: CGPA × 9.5.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">5. Anna University</h3>
+                    <p class="text-gray-700 mb-1">Formula: CGPA × 10.</p>
+                    <p class="text-gray-700">Note: Some departments use 9.5 for lateral entry students.</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <h3 class="font-bold text-purple-800 mb-2">6. Custom University Rules</h3>
+                    <p class="text-gray-700 mb-1">Amity University: Uses 10.0 multiplier.</p>
+                    <p class="text-gray-700">SRM University: Varies by program; check department guidelines.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center mb-5 mt-8">
+                <div class="bg-blue-100 rounded-full p-3 mr-4">
+                    <i class="fas fa-question-circle text-blue-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">FAQs: Original & Detailed Answers</h2>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-2">1. Is 7 CGPA Good Enough for Campus Placements?</h3>
+                    <p class="text-gray-700">A 7.0 CGPA (66.5% in CBSE) meets basic eligibility for most mass recruiters. However, top firms like Google or Microsoft often require 8.0+ CGPA.</p>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-2">2. How to Convert CGPA Without Memorizing Formulas?</h3>
+                    <p class="text-gray-700">Use our CGPA to Percentage Calculator for instant results. Just input your CGPA and university name!</p>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-2">3. Do All Colleges Use the Same Multiplier?</h3>
+                    <p class="text-gray-700">No! While 9.5 is common, universities like VTU (×10) and AKTU [(CGPA – 0.5) ×10] have unique rules.</p>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-2">4. Can Engineering Students Use This Calculator?</h3>
+                    <p class="text-gray-700">Yes! Our tool supports engineering CGPA conversions for VTU, MU, AKTU, and more.</p>
+                </div>
+            </div>
+            
+            <div class="bg-green-50 p-5 rounded-lg border border-green-100 mb-6">
+                <h3 class="font-bold text-green-800 text-xl mb-3">Conclusion</h3>
+                <p class="text-gray-700 mb-3">
+                    Converting CGPA to percentage is vital for job applications, higher studies, and government exams. While CBSE's 9.5× rule is standard, always confirm your university's formula. For quick, error-free results, use our CGPA to Percentage Calculator and skip the manual calculations!
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <p class="text-center text-gray-400">Used by university students globally</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cgpaInput = document.getElementById('cgpa-input');
+            const calculateBtn = document.getElementById('calculate');
+            const resultDiv = document.getElementById('result');
+            const percentageValueSpan = document.getElementById('percentage-value');
+            
+            // Calculate percentage
+            calculateBtn.addEventListener('click', () => {
+                const cgpa = parseFloat(cgpaInput.value);
+                
+                // Reset any previous errors
+                cgpaInput.classList.remove('border-red-500');
+                cgpaInput.classList.remove('input-error');
+                
+                // Validate input
+                if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
+                    cgpaInput.classList.add('border-red-500');
+                    cgpaInput.classList.add('input-error');
+                    // Shake animation for invalid input
+                    cgpaInput.animate([
+                        { transform: 'translateX(0px)' },
+                        { transform: 'translateX(-5px)' },
+                        { transform: 'translateX(5px)' },
+                        { transform: 'translateX(-5px)' },
+                        { transform: 'translateX(0px)' }
+                    ], {
+                        duration: 300
+                    });
+                    
+                    alert('Please enter a valid CGPA between 0 and 10.');
+                    return;
+                }
+                
+                // Calculate percentage (CGPA × 9.5)
+                const percentage = cgpa * 9.5;
+                
+                // Display result with animation
+                resultDiv.classList.remove('hidden');
+                percentageValueSpan.textContent = percentage.toFixed(2);
+                
+                // Scroll to result
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Add flash effect to result
+                resultDiv.animate([
+                    { backgroundColor: 'rgba(219, 234, 254, 0.8)' }, // blue-100 with opacity
+                    { backgroundColor: 'transparent' }
+                ], {
+                    duration: 1000
+                });
+            });
+            
+            // Allow Enter key to trigger calculation
+            cgpaInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    calculateBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
